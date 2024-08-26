@@ -36,6 +36,8 @@ const DocumentRow = ({ id, fileName, date }) => {
           <div className="flex w-full justify-between items-center md:px-2 py-4 rounded-lg dark:hover:bg-white/5 hover:bg-gray-100 text-gray-700 cursor-pointer">
             <div className="flex items-center space-x-4">
               <Image
+                width="auto"
+                height="auto"
                 className="w-6 h-6 md:w-8 md:h-8"
                 alt="Row-Doc-Icon"
                 src={rowDocIcon}

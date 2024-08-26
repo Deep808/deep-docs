@@ -34,6 +34,8 @@ const SearchedDocs = ({ fileName, id }) => {
           <div className="flex flex-col p-6 hover:bg-gray-500/10 dark:hover:bg-white/10">
             <div className="flex items-center space-x-4">
               <Image
+                width="auto"
+                height="auto"
                 alt="doc-icon"
                 className="w-4 h-4 md:w-6 md:h-6"
                 src={rowDocIcon}
