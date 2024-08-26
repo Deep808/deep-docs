@@ -1,23 +1,27 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import Login from "./Login";
 import Header from "./Header";
 import NewDoc from "./NewDoc";
 import MyDocs from "./MyDocs";
-import { hatch } from "ldrs";
 import { useStore } from "@/hooks/useStore";
 import toast, { Toaster } from "react-hot-toast";
 
 const MainDashboard = () => {
   const { data: session, status } = useSession();
-  const { mode, isToast, setMode } = useStore();
+  const { mode, isToast } = useStore();
   const toastDisplayed = useRef(false);
-
-  hatch.register();
+  const [loading, setLoading] = useState(status === "loading");
 
   useEffect(() => {
+    import("ldrs").then((module) => {
+      const { hatch } = module;
+      hatch.register();
+    });
+
+    // Handle toast notifications
     if (isToast && !toastDisplayed.current) {
       toast.success("Changes Saved!", {
         style: {
@@ -31,9 +35,14 @@ const MainDashboard = () => {
     if (!isToast) {
       toastDisplayed.current = false;
     }
-  }, [isToast, mode]);
 
-  if (status === "loading") {
+    // Update loading state based on session status
+    if (status !== "loading") {
+      setLoading(false);
+    }
+  }, [isToast, mode, status]);
+
+  if (loading) {
     return (
       <div
         className={`flex ${
