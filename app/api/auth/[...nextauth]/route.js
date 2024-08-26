@@ -35,6 +35,7 @@ const handler = NextAuth({
     error: "/auth/error", // Custom error page
   },
   debug: true, // Enable debug mode to get detailed logs
+  secret: process.env.NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };
