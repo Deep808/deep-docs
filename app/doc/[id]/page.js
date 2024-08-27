@@ -14,6 +14,7 @@ import "../../../style.css";
 import { BsPersonFillUp } from "react-icons/bs";
 import TextEditor from "@/components/TextEditor";
 import { useStore } from "@/hooks/useStore";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const Doc = ({ params }) => {
   const { data: session, status } = useSession();
@@ -64,11 +65,16 @@ const Doc = ({ params }) => {
     <div className={`${mode ? "dark" : "light"}`}>
       <header className="flex sticky top-0 z-50 w-full shadow-md dark:bg-[#212121] bg-white justify-between items-center px-4 py-3">
         <div className="flex items-center">
-          <Link onClick={() => setIsToast(true)} href={"/"}>
-            <div className="flex items-center">
-              <Image width={30} height={30} alt="logo" src={rowDocIcon} />
-            </div>
+          <Link
+            className="hover:bg-gray-500/10 dark:hover:bg-white/5 ml-0  mr-1 lg:mr-3 rounded-full p-2"
+            onClick={() => setIsToast(true)}
+            href={"/"}
+          >
+            <IoArrowBackOutline className="dark:text-white  text-gray-600 w-6 h-6 lg:w-6 lg:h-6" />
           </Link>
+          <div className="flex items-center">
+            <Image width={30} height={30} alt="logo" src={rowDocIcon} />
+          </div>
           <div className="flex-grow ml-2 px-2">
             <h1 className="font-bold dark:text-gray-500">{userDoc.fileName}</h1>
             <div className="flex items-center text-sm space-x-1 -ml-2 h-8 text-gray-600">

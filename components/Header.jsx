@@ -1,15 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { IconButton } from "@material-tailwind/react";
-import { IoMdMenu } from "react-icons/io";
+// import { IconButton } from "@material-tailwind/react";
+// import { IoMdMenu } from "react-icons/io";
 import { CiLight } from "react-icons/ci";
 import { IoIosSearch } from "react-icons/io";
 import { GoMoon } from "react-icons/go";
 import Image from "next/image";
 import dlogo from "../public/Deep-Docs-Logo.svg";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { useStore } from "@/hooks/useStore";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -46,7 +46,7 @@ const Header = () => {
 
   return (
     <header className="sticky dark:bg-[#212121] top-0 z-50 flex justify-between md:justify-start lg:justify-start items-center w-full px-4 py-4 shadow-md bg-white">
-      <div>
+      {/* <div>
         <IconButton
           ripple="dark"
           className="block md:hidden lg:hidden w-20 h-20 border-0"
@@ -55,10 +55,10 @@ const Header = () => {
         >
           <IoMdMenu className="block md:hidden lg:hidden w-6 h-6 md:w-8 md:h-8 text-gray-700" />
         </IconButton>
-      </div>
+      </div> */}
       <div className="flex items-center">
         <Image
-          className="hidden md:block lg:block"
+          className="block md:block lg:block"
           width={35}
           height={35}
           alt="logo"

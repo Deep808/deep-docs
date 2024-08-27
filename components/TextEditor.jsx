@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import JoditEditor from "jodit-react";
-import { db } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useDocumentOnce } from "react-firebase-hooks/firestore";
 import AiSuggestion from "./AiSuggestion";
 import { useStore } from "@/hooks/useStore";
 import useThemeMode from "@/hooks/useThemeMode";
+import { db } from "@/firebase";
 
 const TextEditor = ({ session, id }) => {
   const [content, setContent] = useState("");
@@ -16,8 +16,7 @@ const TextEditor = ({ session, id }) => {
   const config = useMemo(
     () => ({
       readonly: false,
-      fullSize: false,
-      placeholder: content !== "" ? "" : "Start your story...",
+      placeholder: "",
       style: {
         backgroundColor: mode ? "#232323" : "#F8F9FA",
         color: mode ? "white" : "black",
@@ -31,37 +30,63 @@ const TextEditor = ({ session, id }) => {
       showWordsCounter: false,
       showPoweredByJodit: false,
     }),
-    [mode, content]
+    [mode]
   );
 
   const docDataRef = doc(db, "userDocs", session?.user?.email, "docs", id);
-  const [snapshot, error] = useDocumentOnce(docDataRef);
+  const [snapshot] = useDocumentOnce(docDataRef);
 
+  //THEME HOOK
   useThemeMode(db, getDoc, setMode, doc);
 
   useEffect(() => {
-    const fetchDocumentData = () => {
-      if (snapshot?.exists()) {
-        const storedContent = snapshot.data()?.content || "";
-        setContent(storedContent);
-      } else {
-        setContent("");
-      }
-      setLoading(false);
-    };
-
-    fetchDocumentData();
+    if (snapshot?.exists()) {
+      setContent(snapshot.data()?.content || "");
+    }
+    setLoading(false);
   }, [snapshot]);
 
-  const onContentChange = async (newContent) => {
-    setContent(newContent);
-
+  const saveContent = async (newContent) => {
     try {
-      await setDoc(docDataRef, { content: newContent }, { merge: true }); // Save to Firestore
+      await setDoc(docDataRef, { content: newContent }, { merge: true });
     } catch (error) {
       console.error("Error updating document:", error);
     }
   };
+
+  const handleBlur = () => {
+    if (editor.current) {
+      const editorContent = editor.current.value;
+      if (editorContent !== content) {
+        saveContent(editorContent);
+        setContent(editorContent);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (editor.current) {
+        if (editor.current.value == null) {
+          console.log("No Data in the DOC!");
+        } else {
+          saveContent(editor.current.value);
+        }
+      }
+
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (editor.current) {
+        saveContent(editor.current.value);
+      }
+    };
+  }, [content]);
 
   if (loading) {
     return (
@@ -83,7 +108,7 @@ const TextEditor = ({ session, id }) => {
           value={content}
           config={config}
           tabIndex={1}
-          onBlur={onContentChange}
+          onBlur={handleBlur} // Save on blur event
         />
       </div>
       <AiSuggestion />
