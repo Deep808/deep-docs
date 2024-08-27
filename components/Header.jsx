@@ -101,7 +101,7 @@ const Header = () => {
         </div>
         <div className="flex items-center">
           <div
-            className="hover:bg-gray-300 rounded-full p-2"
+            className="lg:hover:bg-gray-300 rounded-full p-2"
             onClick={handleMode}
           >
             {mode ? (

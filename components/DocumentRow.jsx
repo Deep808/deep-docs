@@ -33,7 +33,7 @@ const DocumentRow = ({ id, fileName, date }) => {
       <Toaster position="bottom-center" reverseOrder={false} />
       <div className="flex items-center py-1 text-[0.8em] md:text-base justify-between">
         <Link className="flex justify-between w-full" href={`/doc/${id}`}>
-          <div className="flex w-full justify-between items-center md:px-2 py-4 rounded-lg dark:hover:bg-white/5 hover:bg-gray-100 text-gray-700 cursor-pointer">
+          <div className="flex w-full justify-between items-center md:px-2 py-4 rounded-lg lg:dark:hover:bg-white/5 lg:hover:bg-gray-100 text-gray-700 cursor-pointer">
             <div className="flex items-center space-x-4">
               <Image
                 width={30}
