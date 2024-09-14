@@ -16,6 +16,8 @@ import TextEditor from "@/components/TextEditor";
 import { useStore } from "@/hooks/useStore";
 import { IoArrowBackOutline } from "react-icons/io5";
 
+import { useRouter } from "next/navigation";
+
 const Doc = ({ params }) => {
   const { data: session, status } = useSession();
   const { id } = params;
@@ -24,6 +26,8 @@ const Doc = ({ params }) => {
 
   const [userDoc, setUserDoc] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
 
   hatch.register();
 
@@ -60,6 +64,10 @@ const Doc = ({ params }) => {
   }
 
   if (!session) return <Login />;
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/" }); // Ensure proper redirect after signing out
+  };
 
   return (
     <div className={`${mode ? "dark" : "light"}`}>
@@ -102,7 +110,7 @@ const Doc = ({ params }) => {
             className="md:block cursor-pointer w-8 h-8 rounded-full ml-2 object-cover"
             src={session?.user?.image}
             alt="profile-image"
-            onClick={signOut}
+            onClick={handleSignOut}
           />
         </div>
       </header>
